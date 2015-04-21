@@ -69,8 +69,8 @@ this.createjs = this.createjs||{};
 	 **/
 	function Text(text, font, color) {
 		this.DisplayObject_constructor();
-		
-		
+
+
 	// public properties:
 		/**
 		 * The text to display.
@@ -78,14 +78,14 @@ this.createjs = this.createjs||{};
 		 * @type String
 		 **/
 		this.text = text;
-	
+
 		/**
 		 * The font style to use. Any valid value for the CSS font attribute is acceptable (ex. "bold 36px Arial").
 		 * @property font
 		 * @type String
 		 **/
 		this.font = font;
-	
+
 		/**
 		 * The color to draw the text in. Any valid value for the CSS color attribute is acceptable (ex. "#F00"). Default is "#000".
 		 * It will also accept valid canvas fillStyle values.
@@ -93,7 +93,7 @@ this.createjs = this.createjs||{};
 		 * @type String
 		 **/
 		this.color = color;
-	
+
 		/**
 		 * The horizontal text alignment. Any of "start", "end", "left", "right", and "center". For detailed
 		 * information view the
@@ -103,7 +103,7 @@ this.createjs = this.createjs||{};
 		 * @type String
 		 **/
 		this.textAlign = "left";
-	
+
 		/**
 		 * The vertical alignment point on the font. Any of "top", "hanging", "middle", "alphabetic", "ideographic", or
 		 * "bottom". For detailed information view the <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#text-styles">
@@ -112,7 +112,7 @@ this.createjs = this.createjs||{};
 		 * @type String
 		*/
 		this.textBaseline = "top";
-	
+
 		/**
 		 * The maximum width to draw the text. If maxWidth is specified (not null), the text will be condensed or
 		 * shrunk to make it fit in this width. For detailed information view the
@@ -122,14 +122,14 @@ this.createjs = this.createjs||{};
 		 * @type Number
 		*/
 		this.maxWidth = null;
-	
+
 		/**
 		 * If greater than 0, the text will be drawn as a stroke (outline) of the specified width.
 		 * @property outline
 		 * @type Number
 		 **/
 		this.outline = 0;
-	
+
 		/**
 		 * Indicates the line height (vertical distance between baselines) for multi-line text. If null or 0,
 		 * the value of getMeasuredLineHeight is used.
@@ -137,7 +137,7 @@ this.createjs = this.createjs||{};
 		 * @type Number
 		 **/
 		this.lineHeight = 0;
-	
+
 		/**
 		 * Indicates the maximum width for a line of text before it is wrapped to multiple lines. If null,
 		 * the text will not be wrapped.
@@ -151,7 +151,7 @@ this.createjs = this.createjs||{};
 	// TODO: deprecated
 	// p.initialize = function() {}; // searchable for devs wondering where it is. REMOVED. See docs for details.
 
-	
+
 // static properties:
 	/**
 	 * @property _workingContext
@@ -160,8 +160,8 @@ this.createjs = this.createjs||{};
 	 **/
 	var canvas = (createjs.createCanvas?createjs.createCanvas():document.createElement("canvas"));
 	if (canvas.getContext) { Text._workingContext = canvas.getContext("2d"); canvas.width = canvas.height = 1; }
-	
-	
+
+
 // constants:
 	/**
 	 * Lookup table for the ratio to offset bounds x calculations based on the textAlign property.
@@ -171,7 +171,7 @@ this.createjs = this.createjs||{};
 	 * @static
 	 **/
 	Text.H_OFFSETS = {start: 0, left: 0, center: -0.5, end: -1, right: -1};
-	
+
 	/**
 	 * Lookup table for the ratio to offset bounds y calculations based on the textBaseline property.
 	 * @property H_OFFSETS
@@ -211,7 +211,7 @@ this.createjs = this.createjs||{};
 		var col = this.color || "#000";
 		if (this.outline) { ctx.strokeStyle = col; ctx.lineWidth = this.outline*1; }
 		else { ctx.fillStyle = col; }
-		
+
 		this._drawText(this._prepContext(ctx));
 		return true;
 	};
@@ -261,7 +261,7 @@ this.createjs = this.createjs||{};
 		var y = lineHeight * Text.V_OFFSETS[this.textBaseline||"top"];
 		return this._rectangle.setValues(x, y, w, o.height);
 	};
-	
+
 	/**
 	 * Returns an object with width, height, and lines properties. The width and height are the visual width and height
 	 * of the drawn text. The lines property contains an array of strings, one for
@@ -344,43 +344,45 @@ this.createjs = this.createjs||{};
 			this._prepContext(ctx);
 		}
 		var lineHeight = this.lineHeight||this.getMeasuredLineHeight();
-		
+
 		var maxW = 0, count = 0;
 		var hardLines = String(this.text).split(/(?:\r\n|\r|\n)/);
 		for (var i=0, l=hardLines.length; i<l; i++) {
 			var str = hardLines[i];
 			var w = null;
-			
+
 			if (this.lineWidth != null && (w = ctx.measureText(str).width) > this.lineWidth) {
 				// text wrapping:
-				var words = str.split(/(\s)/);
+				var words = str.split("");
+				//var words = str.split(/(\s)/);
 				str = words[0];
 				w = ctx.measureText(str).width;
-				
-				for (var j=1, jl=words.length; j<jl; j+=2) {
+
+				for (var j=1; j<words.length; j+=1) {
 					// Line needs to wrap:
-					var wordW = ctx.measureText(words[j] + words[j+1]).width;
+					var wordW = ctx.measureText(words[j]).width;
 					if (w + wordW > this.lineWidth) {
+                        str += words[j];
 						if (paint) { this._drawTextLine(ctx, str, count*lineHeight); }
 						if (lines) { lines.push(str); }
 						if (w > maxW) { maxW = w; }
-						str = words[j+1];
-						w = ctx.measureText(str).width;
+                        str = "";
+                        w = 0;
 						count++;
 					} else {
-						str += words[j] + words[j+1];
+						str += words[j];
 						w += wordW;
 					}
 				}
 			}
-			
+
 			if (paint) { this._drawTextLine(ctx, str, count*lineHeight); }
 			if (lines) { lines.push(str); }
 			if (o && w == null) { w = ctx.measureText(str).width; }
 			if (w > maxW) { maxW = w; }
 			count++;
 		}
-		
+
 		if (o) {
 			o.width = maxW;
 			o.height = count*lineHeight;
@@ -401,8 +403,8 @@ this.createjs = this.createjs||{};
 		if (this.outline) { ctx.strokeText(text, 0, y, this.maxWidth||0xFFFF); }
 		else { ctx.fillText(text, 0, y, this.maxWidth||0xFFFF); }
 	};
-	
-	
+
+
 	/**
 	 * @method _getMeasuredWidth
 	 * @param {String} text

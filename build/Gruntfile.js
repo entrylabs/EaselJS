@@ -358,6 +358,16 @@ module.exports = function (grunt) {
 		grunt.task.run(["setVersion", "coreBuild", "updatebower", "copy:docsSite", "clearBuildArgs"]);
 	});
 
+	/**
+	 * Task for exporting a release build (version based on package.json)
+	 *
+	 */
+	grunt.registerTask('asdf', function() {
+		grunt.config("buildArgs", this.args || []);
+		getBuildArgs();
+		grunt.task.run(["setVersion", "sourceBuild"]);
+	});
+
 	grunt.registerTask('clearBuildArgs', function() {
 		grunt.config("buildArgs", []);
 	});
