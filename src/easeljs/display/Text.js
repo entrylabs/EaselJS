@@ -362,12 +362,11 @@ this.createjs = this.createjs||{};
 					// Line needs to wrap:
 					var wordW = ctx.measureText(words[j]).width;
 					if (w + wordW > this.lineWidth) {
-                        str += words[j];
 						if (paint) { this._drawTextLine(ctx, str, count*lineHeight); }
 						if (lines) { lines.push(str); }
 						if (w > maxW) { maxW = w; }
-                        str = "";
-                        w = 0;
+                        str = words[j];
+                        w = wordW;
 						count++;
 					} else {
 						str += words[j];
