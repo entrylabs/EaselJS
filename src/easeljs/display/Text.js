@@ -140,11 +140,19 @@ this.createjs = this.createjs||{};
 
 		/**
 		 * Indicates the maximum width for a line of text before it is wrapped to multiple lines. If null,
-		 * the text will not be wrapped.
+		 * the text will be wrapped.
 		 * @property lineWidth
 		 * @type Number
 		 **/
 		this.lineWidth = null;
+
+		/**
+		 * Indicates the maximum height.
+         * If text exceed max height, overflow line will be not shown.
+		 * @property maxHeight
+		 * @type Number
+		 **/
+		this.maxHeight = null;
 	}
 	var p = createjs.extend(Text, createjs.DisplayObject);
 
@@ -359,6 +367,8 @@ this.createjs = this.createjs||{};
 				w = ctx.measureText(str).width;
 
 				for (var j=1; j<words.length; j+=1) {
+                    if (this.maxHeight != null && ((count + 1) * lineHeight) > this.maxHeight)
+                        break;
 					// Line needs to wrap:
 					var wordW = ctx.measureText(words[j]).width;
 					if (w + wordW > this.lineWidth) {
@@ -374,6 +384,9 @@ this.createjs = this.createjs||{};
 					}
 				}
 			}
+
+            if (this.maxHeight != null && ((count + 1) * lineHeight) > this.maxHeight)
+                break;
 
 			if (paint) { this._drawTextLine(ctx, str, count*lineHeight); }
 			if (lines) { lines.push(str); }
