@@ -147,6 +147,28 @@ this.createjs = this.createjs||{};
 		this.lineWidth = null;
 
 		/**
+		 * Indicates text has under line.
+		 * @property underLine
+		 * @type Boolean
+		 **/
+		this.underLine = false;
+
+		/**
+		 * Indicates text has strike line.
+		 * @property strike
+		 * @type Boolean
+		 **/
+		this.strike = false;
+
+		/**
+		 * Indicates the maximum width for a line of text before it is wrapped to multiple lines. If null,
+		 * the text will be wrapped.
+		 * @property lineWidth
+		 * @type Number
+		 **/
+		this.lineWidth = null;
+
+		/**
 		 * Indicates the maximum height.
          * If text exceed max height, overflow line will be not shown.
 		 * @property maxHeight
@@ -414,6 +436,21 @@ this.createjs = this.createjs||{};
 		// Chrome 17 will fail to draw the text if the last param is included but null, so we feed it a large value instead:
 		if (this.outline) { ctx.strokeText(text, 0, y, this.maxWidth||0xFFFF); }
 		else { ctx.fillText(text, 0, y, this.maxWidth||0xFFFF); }
+        if (this.strike) {
+            var width = ctx.measureText(text).width;
+            ctx.beginPath();
+            ctx.moveTo(- 0.5 * width, y);
+            ctx.lineTo(0.5 * width, y);
+            ctx.stroke();
+        }
+        if (this.underLine) {
+            var width = ctx.measureText(text).width;
+            var lineHeight = this.lineHeight||this.getMeasuredLineHeight();
+            ctx.beginPath();
+            ctx.moveTo(- 0.5 * width, y + 0.4 * lineHeight);
+            ctx.lineTo(0.5 * width, y + 0.4 * lineHeight);
+            ctx.stroke();
+        }
 	};
 
 
