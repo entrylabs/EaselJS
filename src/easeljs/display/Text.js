@@ -439,16 +439,42 @@ this.createjs = this.createjs||{};
         if (this.strike) {
             var width = ctx.measureText(text).width;
             ctx.beginPath();
-            ctx.moveTo(- 0.5 * width, y);
-            ctx.lineTo(0.5 * width, y);
+            switch(this.textAlign) {
+                case "left":
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(width, y);
+                    break;
+                case "center":
+                    ctx.moveTo(- 0.5 * width, y);
+                    ctx.lineTo(0.5 * width, y);
+                    break;
+                case "right":
+                    ctx.moveTo(- width, y);
+                    ctx.lineTo(0, y);
+                    break;
+            }
+            ctx.strokeStyle = this.color;
             ctx.stroke();
         }
         if (this.underLine) {
             var width = ctx.measureText(text).width;
             var lineHeight = this.lineHeight||this.getMeasuredLineHeight();
             ctx.beginPath();
-            ctx.moveTo(- 0.5 * width, y + 0.4 * lineHeight);
-            ctx.lineTo(0.5 * width, y + 0.4 * lineHeight);
+            switch(this.textAlign) {
+                case "left":
+                    ctx.moveTo(0, y + 0.4 * lineHeight);
+                    ctx.lineTo(width, y + 0.4 * lineHeight);
+                    break;
+                case "center":
+                    ctx.moveTo(- 0.5 * width, y + 0.4 * lineHeight);
+                    ctx.lineTo(0.5 * width, y + 0.4 * lineHeight);
+                    break;
+                case "right":
+                    ctx.moveTo(- width, y + 0.4 * lineHeight);
+                    ctx.lineTo(0, y + 0.4 * lineHeight);
+                    break;
+            }
+            ctx.strokeStyle = this.color;
             ctx.stroke();
         }
 	};
