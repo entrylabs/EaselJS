@@ -163,21 +163,14 @@ this.createjs = this.createjs||{};
 		 * @type {StrokeStyle}
 		 **/
 		this._strokeStyle = null;
-		
-		/**
-		 * @property _oldStrokeStyle
-		 * @protected
-		 * @type {StrokeStyle}
-		 **/
-		this._oldStrokeStyle = null;
-		
+
 		/**
 		 * @property _strokeDash
 		 * @protected
 		 * @type {StrokeDash}
 		 **/
 		this._strokeDash = null;
-		
+
 		/**
 		 * @property _oldStrokeDash
 		 * @protected
@@ -604,7 +597,7 @@ this.createjs = this.createjs||{};
 	 **/
 	p.clear = function() {
 		this._instructions.length = this._activeInstructions.length = this._commitIndex = 0;
-		this._strokeStyle = this._oldStrokeStyle = this._stroke = this._fill = this._strokeDash = this._oldStrokeDash = null;
+		this._strokeStyle = this._stroke = this._fill = this._strokeDash = this._oldStrokeDash = null;
 		this._dirty = this._strokeIgnoreScale = false;
 		return this;
 	};
@@ -730,7 +723,7 @@ this.createjs = this.createjs||{};
 		this._strokeIgnoreScale = ignoreScale;
 		return this;
 	};
-	
+
 	/**
 	 * Sets or clears the stroke dash pattern.
 	 *
@@ -1378,7 +1371,7 @@ this.createjs = this.createjs||{};
 	 * @protected
 	 **/
 	p.ss = p.setStrokeStyle;
-	
+
 	/**
 	 * Shortcut to setStrokeDash.
 	 * @method sd
@@ -1586,10 +1579,7 @@ this.createjs = this.createjs||{};
 					this._oldStrokeDash = this._strokeDash;
 					instr.push(this._strokeDash);
 				}
-				if (this._strokeStyle !== this._oldStrokeStyle) {
-					this._oldStrokeStyle = this._strokeStyle;
-					instr.push(this._strokeStyle);
-				}
+                instr.push(this._strokeStyle);
 				instr.push(this._stroke);
 			}
 
@@ -2101,7 +2091,7 @@ this.createjs = this.createjs||{};
 		ctx.miterLimit = (this.miterLimit == null ? "10" : this.miterLimit);
 	};
 	p.path = false;
-	
+
 	/**
 	 * Graphics command object. See {{#crossLink "Graphics/setStrokeDash"}}{{/crossLink}} and {{#crossLink "Graphics/append"}}{{/crossLink}} for more information.
 	 * @class StrokeDash
